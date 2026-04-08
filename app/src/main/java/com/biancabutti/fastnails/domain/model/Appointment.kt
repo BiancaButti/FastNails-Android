@@ -9,11 +9,6 @@ data class Appointment(
     val scheduledAt: String?
 )
 
-enum class ServiceType {
-    HANDS,
-    FEET
-}
-
 enum class AppointmentStatus {
     REQUESTED,
     CONFIRMED,
