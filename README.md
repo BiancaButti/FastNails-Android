@@ -10,18 +10,20 @@
 
 **Kotlin:** 2.0.20
 
+---
+
 FastNails is a mobile application that connects users to nail care professionals on demand, prioritizing **speed, simplicity, and a fluid experience**.
 
-The goal is to allow users to quickly schedule an appointment in everyday situations — such as unexpected commitments or self-care moments — with a focus on **usability and operational efficiency**.
+The goal is to allow users to quickly schedule an appointment in everyday situations — such as unexpected commitments or self-care moments — with a strong focus on **usability and operational efficiency**.
 
 ---
 
 ## 🎯 Objective
 
-- Reduce friction in accessing beauty services
-- Connect users and professionals efficiently
-- Ensure a simple and predictable experience
-- Validate an on-demand service model in a controlled environment
+* Reduce friction in accessing beauty services
+* Connect users and professionals efficiently
+* Ensure a simple and predictable experience
+* Validate an on-demand service model in a controlled environment
 
 ---
 
@@ -29,36 +31,37 @@ The goal is to allow users to quickly schedule an appointment in everyday situat
 
 The first version of the system includes:
 
-- User authentication and registration
-- On-demand service request
-- Service selection:
-  - Hands
-  - Feet
-- Geographic restriction (initial regions defined)
-- List of available professionals
-- Appointment confirmation
-- Status tracking until completion
+* User authentication and registration
+* On-demand service request
+* Service selection:
 
-Advanced features will be introduced iteratively.
+  * Hands
+  * Feet
+* Geographic restriction (initial regions defined)
+* List of available professionals
+* Appointment confirmation
+* Status tracking until completion
+
+> Advanced features will be introduced iteratively.
 
 ---
 
 ## 🧱 Architecture
 
-The project follows the principles of **Clean Architecture**, with clear separation of responsibilities and dependency inversion.
+The project follows the principles of **Clean Architecture**, ensuring clear separation of responsibilities and proper dependency inversion.
 
 ### 📐 Layers
 
 #### 🎨 Presentation
 
-Responsible for the interface and user interaction.
+Responsible for UI rendering and user interaction.
 
-- Jetpack Compose
-- ViewModels (`ViewModel` + `StateFlow`)
-- State management (loading, success, error)
-- Navigation (Jetpack Navigation Compose)
+* Jetpack Compose
+* ViewModels (`ViewModel` + `StateFlow`)
+* UI state management (loading, success, error)
+* Navigation (Navigation Compose)
 
-> The presentation layer contains no business logic.
+> This layer contains no business logic.
 
 ---
 
@@ -66,54 +69,62 @@ Responsible for the interface and user interaction.
 
 The core layer of the system.
 
-- Entities
-- Use Cases
-- Repository protocols (interfaces)
+* Entities
+* Use Cases
+* Repository interfaces
 
-> Independent of frameworks, UI, and infrastructure.
+> Fully independent from frameworks, UI, and data sources.
 
 ---
 
 #### 🔌 Data
 
-Responsible for communication with external sources.
+Handles data operations and external integrations.
 
-- Repository implementations
-- API integration (Retrofit)
-- DTO to entity conversion
+* Repository implementations
+* Remote data sources (API integration)
+* DTO ↔ Entity mapping
 
 ---
 
 ### 🔄 Dependency Flow
 
-View → ViewModel → UseCase → Repository (interface) → Repository (implementation)
-
+```
+UI → ViewModel → UseCase → Repository (interface) → Repository (implementation)
+```
 
 ---
 
 ## ♿ Accessibility
 
-The app was built with accessibility support, ensuring an inclusive experience for all users:
+The application is built with accessibility in mind, ensuring an inclusive experience:
 
-- TalkBack support
-- Descriptive labels on interactive elements (`contentDescription`)
-- Adequate contrast and readability
+* TalkBack support
+* Meaningful accessibility labels (`contentDescription`)
+* Proper contrast and readability
 
 ---
 
 ## 🧪 Unit Tests
 
-The project includes unit test coverage across the Domain and Data layers, validating the main use cases and business rules.
+The project includes unit test coverage for the **Domain** and **Data** layers, ensuring business rules and core flows are properly validated.
 
 ---
 
 ## 🎨 Design System
 
-The project uses a **custom Design System**, developed as a dedicated module and versioned independently.
+The project uses a **custom Design System**, implemented as a dedicated module and versioned independently.
+
+This module centralizes:
+
+* Colors
+* Typography
+* Components (Buttons, Cards, etc.)
+* Theming
 
 ---
 
 <p align="center">
   <strong>Developed by Bianca Butti</strong><br/>
-  <sub>FastNails • iOS and (in the near future) Android Engineering</sub>
+  <sub>FastNails • Mobile Engineering (iOS & Android)</sub>
 </p>
