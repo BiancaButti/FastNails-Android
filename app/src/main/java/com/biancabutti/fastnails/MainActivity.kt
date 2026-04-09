@@ -4,44 +4,26 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.activity.viewModels
+import com.biancabutti.fastnails.presentation.screen.RootScreen
+import com.biancabutti.fastnails.presentation.viewmodel.AppFlowViewModel
+import com.biancabutti.fastnails.presentation.viewmodel.AppFlowViewModelFactory
 import com.biancabutti.fastnails.ui.theme.FastNailsTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: AppFlowViewModel by viewModels {
+        val appContainer = (application as FastNailsApplication).appContainer
+        AppFlowViewModelFactory(appContainer.authRepository)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             FastNailsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                RootScreen(viewModel = viewModel)
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FastNailsTheme {
-        Greeting("Bianca")
     }
 }
