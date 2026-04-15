@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">FastNails</string>
+
+    <!-- Login -->
+    <string name="login_field_email">E-mail</string>
+    <string name="login_field_email_placeholder">seu@email.com</string>
+    <string name="login_field_password">Senha</string>
+    <string name="login_field_password_placeholder">••••••••</string>
+    <string name="login_button_forgot_password">Esqueceu a senha?</string>
+    <string name="login_button_sign_in">Entrar</string>
+    <string name="login_link_no_account">Não tem conta?</string>
+    <string name="login_link_sign_up">Criar conta</string>
+    <string name="login_validation_email_invalid">E-mail inválido</string>
+    <string name="login_button_sign_in_accessibility_hint">Toca para entrar com e-mail e senha</string>
+    <string name="login_button_forgot_password_accessibility_hint">Abre a tela de recuperação de senha</string>
+    <string name="login_link_sign_up_accessibility_hint">Abre a tela de cadastro</string>
+    <string name="login_show_password">Mostrar senha</string>
+    <string name="login_hide_password">Ocultar senha</string>
+
+    <!-- Home -->
+    <string name="home_title">Home</string>
+    <string name="home_button_sign_out">Sair</string>
+
+    <!-- Common -->
+    <string name="common_or">ou</string>
+    <string name="common_button_disabled">Botão desabilitado</string>
+    <string name="common_loading">A carregar</string>
 </resources>
