@@ -11,6 +11,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 class AppFlowViewModel(
@@ -35,18 +36,15 @@ class AppFlowViewModel(
 
     private fun observeSessionState() {
         viewModelScope.launch {
-            // Read initial session via currentSessionOrNull() before the flow emits
-            authRepository.currentUser()?.let {
-                coordinator.navigateToHome()
-            }
-            // Subscribe to sessionStatus flow for reactive auth state updates
-            authRepository.sessionState.collect { sessionState ->
-                when (sessionState) {
-                    is SessionState.Active -> coordinator.navigateToHome()
-                    SessionState.Inactive -> coordinator.navigateToLogin()
-                    SessionState.Loading -> Unit
+            authRepository.sessionState
+                .distinctUntilChanged()
+                .collect { sessionState ->
+                    when (sessionState) {
+                        is SessionState.Active -> coordinator.navigateToHome()
+                        SessionState.Inactive -> coordinator.navigateToLogin()
+                        SessionState.Loading -> Unit
+                    }
                 }
-            }
         }
     }
 
@@ -91,6 +89,9 @@ class AppFlowViewModelFactory(
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (!modelClass.isAssignableFrom(AppFlowViewModel::class.java)) {
+            throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
+        }
         return AppFlowViewModel(authRepository, coordinator) as T
     }
 }

@@ -24,4 +24,5 @@
     <!-- Common -->
     <string name="common_or">ou</string>
     <string name="common_button_disabled">Botão desabilitado</string>
+    <string name="common_loading">A carregar</string>
 </resources>

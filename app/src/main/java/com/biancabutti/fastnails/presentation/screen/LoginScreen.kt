@@ -58,6 +58,7 @@ fun LoginScreen(viewModel: AppFlowViewModel) {
     val signInHint = stringResource(R.string.login_button_sign_in_accessibility_hint)
     val forgotPasswordHint = stringResource(R.string.login_button_forgot_password_accessibility_hint)
     val signUpHint = stringResource(R.string.login_link_sign_up_accessibility_hint)
+    val loadingDescription = stringResource(R.string.common_loading)
 
     val isSignInEnabled = email.isValidEmail && password.isValidPassword && !isLoading
 
@@ -141,7 +142,7 @@ fun LoginScreen(viewModel: AppFlowViewModel) {
                 CircularProgressIndicator(
                     color = AppPink,
                     modifier = Modifier.semantics {
-                        contentDescription = "A carregar"
+                        contentDescription = loadingDescription
                     }
                 )
             }

@@ -32,7 +32,7 @@ fun DSPrimaryButton(
             .fillMaxWidth()
             .height(52.dp)
             .then(
-                if (actionLabel != null) Modifier.semantics { onClick(label = actionLabel) { false } }
+                if (actionLabel != null) Modifier.semantics { onClick(label = actionLabel) { onClick(); true } }
                 else Modifier
             ),
         shape = RoundedCornerShape(12.dp),

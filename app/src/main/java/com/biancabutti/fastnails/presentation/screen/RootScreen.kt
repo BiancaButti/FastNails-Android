@@ -60,15 +60,9 @@ fun RootScreen(viewModel: AppFlowViewModel) {
             when (route) {
                 AppRoute.Splash -> SplashScreen()
                 AppRoute.Login -> LoginScreen(viewModel = viewModel)
-                AppRoute.Register -> RegisterScreen(
-                    onBack = { viewModel.coordinator.navigateBack(to = AppRoute.Login) }
-                )
-                AppRoute.ForgotPassword -> ForgotPasswordScreen(
-                    onBack = { viewModel.coordinator.navigateBack(to = AppRoute.Login) }
-                )
-                AppRoute.ResetPassword -> ResetPasswordScreen(
-                    onBack = { viewModel.coordinator.navigateBack(to = AppRoute.Login) }
-                )
+                AppRoute.Register -> RegisterScreen()
+                AppRoute.ForgotPassword -> ForgotPasswordScreen()
+                AppRoute.ResetPassword -> ResetPasswordScreen()
                 AppRoute.Home -> HomeScreen(onSignOut = viewModel::signOut)
             }
         }

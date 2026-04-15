@@ -15,12 +15,14 @@ class SupabaseAuthRepository(private val supabase: SupabaseClient) : AuthReposit
     override val sessionState: Flow<SessionState> = supabase.auth.sessionStatus
         .map { status ->
             when (status) {
-                is SessionStatus.Authenticated -> SessionState.Active(
-                    User(
-                        id = status.session.user?.id ?: "",
-                        email = status.session.user?.email
-                    )
-                )
+                is SessionStatus.Authenticated -> {
+                    val user = status.session.user
+                    if (user != null) {
+                        SessionState.Active(User(id = user.id, email = user.email))
+                    } else {
+                        SessionState.Loading
+                    }
+                }
                 is SessionStatus.NotAuthenticated -> SessionState.Inactive
                 else -> SessionState.Loading
             }
