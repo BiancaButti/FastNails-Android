@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: AppFlowViewModel by viewModels {
         val appContainer = (application as FastNailsApplication).appContainer
-        AppFlowViewModelFactory(appContainer.authRepository)
+        AppFlowViewModelFactory(appContainer.authRepository, appContainer.coordinator)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -2,7 +2,7 @@ package com.biancabutti.fastnails.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val AppPink = Color(0xFFE91E8C)
+val AppPink = Color(0xFFBD1672) // contraste ~4.6:1 com texto branco (WCAG AA)
 
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)

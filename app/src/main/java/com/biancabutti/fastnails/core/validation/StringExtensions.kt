@@ -1,9 +1,9 @@
 package com.biancabutti.fastnails.core.validation
 
-import android.util.Patterns
+private val EMAIL_REGEX = Regex("^[A-Za-z0-9._%+\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,}$")
 
 val String.isValidEmail: Boolean
-    get() = isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
+    get() = isNotEmpty() && EMAIL_REGEX.matches(this)
 
 val String.isValidPassword: Boolean
     get() = length >= 6

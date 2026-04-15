@@ -1,12 +1,15 @@
 package com.biancabutti.fastnails.presentation.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
@@ -21,10 +24,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.biancabutti.fastnails.R
@@ -49,22 +56,29 @@ fun LoginScreen(viewModel: AppFlowViewModel) {
 
     val emailInvalidError = stringResource(R.string.login_validation_email_invalid)
     val signInHint = stringResource(R.string.login_button_sign_in_accessibility_hint)
-    val disabledHint = stringResource(R.string.common_button_disabled)
-
-    val isSignInEnabled = email.isValidEmail && password.isValidPassword && !isLoading
     val forgotPasswordHint = stringResource(R.string.login_button_forgot_password_accessibility_hint)
     val signUpHint = stringResource(R.string.login_link_sign_up_accessibility_hint)
+
+    val isSignInEnabled = email.isValidEmail && password.isValidPassword && !isLoading
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .statusBarsPadding()
             .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         // MARK: - Logo
-        // TODO: replace ic_launcher_foreground with the actual fastnails_logo drawable
-        LogoSection()
+        Image(
+            painter = painterResource(R.drawable.fastnails_logo),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp)
+                .padding(top = 20.dp)
+        )
 
         // MARK: - Email
         DSFormTextField(
@@ -113,7 +127,7 @@ fun LoginScreen(viewModel: AppFlowViewModel) {
             title = stringResource(R.string.login_button_sign_in),
             isEnabled = isSignInEnabled,
             color = AppPink,
-            accessibilityHint = if (isSignInEnabled) signInHint else disabledHint,
+            actionLabel = if (isSignInEnabled) signInHint else null,
             onClick = { viewModel.login(email, password) }
         )
 
@@ -124,13 +138,19 @@ fun LoginScreen(viewModel: AppFlowViewModel) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             if (isLoading) {
-                CircularProgressIndicator(color = AppPink)
+                CircularProgressIndicator(
+                    color = AppPink,
+                    modifier = Modifier.semantics {
+                        contentDescription = "A carregar"
+                    }
+                )
             }
-            if (errorMessage != null) {
+            errorMessage?.let {
                 Text(
-                    text = errorMessage!!,
+                    text = it,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Red
+                    color = Color.Red,
+                    textAlign = TextAlign.Center
                 )
             }
         }
@@ -157,30 +177,11 @@ fun LoginScreen(viewModel: AppFlowViewModel) {
             ) {
                 Text(
                     text = stringResource(R.string.login_link_sign_up),
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = androidx.compose.ui.text.font.FontWeight.Medium
-                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Medium,
                     color = AppPink
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun LogoSection() {
-    // TODO: replace with Image(painter = painterResource(R.drawable.fastnails_logo), ...)
-    //       once the asset is added to res/drawable/
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 20.dp),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.headlineLarge,
-            color = AppPink
-        )
     }
 }

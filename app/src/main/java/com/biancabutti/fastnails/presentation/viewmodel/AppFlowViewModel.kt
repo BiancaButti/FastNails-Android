@@ -5,27 +5,29 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.biancabutti.fastnails.domain.repository.AuthRepository
 import com.biancabutti.fastnails.domain.repository.SessionState
+import com.biancabutti.fastnails.presentation.navigation.AppCoordinator
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-sealed interface AuthState {
-    data object Loading : AuthState
-    data object Authenticated : AuthState
-    data object Unauthenticated : AuthState
-}
-
-class AppFlowViewModel(private val authRepository: AuthRepository) : ViewModel() {
-
-    private val _authState = MutableStateFlow<AuthState>(AuthState.Loading)
-    val authState: StateFlow<AuthState> = _authState.asStateFlow()
+class AppFlowViewModel(
+    private val authRepository: AuthRepository,
+    val coordinator: AppCoordinator
+) : ViewModel() {
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
+
+    private val _authNoticeMessage = MutableStateFlow<String?>(null)
+    val authNoticeMessage: StateFlow<String?> = _authNoticeMessage.asStateFlow()
+
+    private var authNoticeJob: Job? = null
 
     init {
         observeSessionState()
@@ -35,14 +37,14 @@ class AppFlowViewModel(private val authRepository: AuthRepository) : ViewModel()
         viewModelScope.launch {
             // Read initial session via currentSessionOrNull() before the flow emits
             authRepository.currentUser()?.let {
-                _authState.value = AuthState.Authenticated
+                coordinator.navigateToHome()
             }
             // Subscribe to sessionStatus flow for reactive auth state updates
             authRepository.sessionState.collect { sessionState ->
-                _authState.value = when (sessionState) {
-                    is SessionState.Active -> AuthState.Authenticated
-                    SessionState.Inactive -> AuthState.Unauthenticated
-                    SessionState.Loading -> _authState.value
+                when (sessionState) {
+                    is SessionState.Active -> coordinator.navigateToHome()
+                    SessionState.Inactive -> coordinator.navigateToLogin()
+                    SessionState.Loading -> Unit
                 }
             }
         }
@@ -62,26 +64,33 @@ class AppFlowViewModel(private val authRepository: AuthRepository) : ViewModel()
         _errorMessage.value = null
     }
 
-    fun navigateToForgotPassword() {
-        // TODO: wire up navigation
-    }
+    fun navigateToForgotPassword() = coordinator.navigateToForgotPassword()
 
-    fun navigateToRegister() {
-        // TODO: wire up navigation
-    }
+    fun navigateToRegister() = coordinator.navigateToRegister()
 
     fun signOut() {
         viewModelScope.launch {
-            authRepository.signOut()
+            runCatching { authRepository.signOut() }
+                .onFailure { _errorMessage.value = it.message }
+        }
+    }
+
+    fun showAuthNotice(message: String) {
+        authNoticeJob?.cancel()
+        authNoticeJob = viewModelScope.launch {
+            _authNoticeMessage.value = message
+            delay(3000)
+            _authNoticeMessage.value = null
         }
     }
 }
 
 class AppFlowViewModelFactory(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val coordinator: AppCoordinator
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AppFlowViewModel(authRepository) as T
+        return AppFlowViewModel(authRepository, coordinator) as T
     }
 }

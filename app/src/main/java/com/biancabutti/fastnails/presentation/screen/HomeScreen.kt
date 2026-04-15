@@ -10,7 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.biancabutti.fastnails.R
 
 @Composable
 fun HomeScreen(onSignOut: () -> Unit) {
@@ -22,14 +24,14 @@ fun HomeScreen(onSignOut: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Home",
+            text = stringResource(R.string.home_title),
             style = MaterialTheme.typography.headlineMedium
         )
         Button(
             onClick = onSignOut,
             modifier = Modifier.padding(top = 24.dp)
         ) {
-            Text(text = "Sign Out")
+            Text(text = stringResource(R.string.home_button_sign_out))
         }
     }
 }
