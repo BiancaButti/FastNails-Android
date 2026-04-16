@@ -4,9 +4,12 @@
     <style name="Theme.FastNails" parent="android:Theme.Material.Light.NoActionBar" />
 
     <style name="Theme.FastNails.Splash" parent="Theme.SplashScreen">
+        <!-- Fase 1: exibido instantaneamente enquanto o processo inicia -->
+        <item name="android:windowBackground">@drawable/splash_fullscreen</item>
+        <!-- Fase 2: ícone centralizado da API de Splash do Android 12+ -->
         <item name="windowSplashScreenBackground">@color/splash_background</item>
-        <item name="android:windowBackground">@color/splash_background</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/fastnails_logo</item>
+        <!-- Fase 3: tema aplicado após o Compose assumir -->
         <item name="postSplashScreenTheme">@style/Theme.FastNails</item>
     </style>
 
